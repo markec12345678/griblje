@@ -1,0 +1,5 @@
+*.tsx !filter
+*.ts !filter
+*.html !filter
+*.css !filter
+*.json !filter
