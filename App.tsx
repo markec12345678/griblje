@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useScroll, useTransform } from 'motion/react';
 import { ArrowDown, BookOpen, CheckCircle2, ChevronRight, Clock3, Filter, Image as ImageIcon, MapPin, Search, X } from 'lucide-react';
 import { collectionLayers, museumRecords, timeline, type MuseumRecord } from './src/data/museum';
 import { mapLayers, villageMapPoints, type MapLayer } from './src/data/map';
+import { VillageMap } from './src/components/VillageMap';
 
 const categories = ['VSE', 'KRAJ', 'KOLPA', 'VOJNA', 'LJUDJE', 'HIŠE', 'PREDMETI', 'SPOMINI'];
 
@@ -27,11 +28,7 @@ function App() {
     });
   }, [query, category]);
 
-  const visibleMapPoints = useMemo(
-    () => villageMapPoints.filter((point) => point.layer === mapLayer),
-    [mapLayer],
-  );
-
+  const visibleMapPoints = useMemo(() => villageMapPoints.filter((point) => point.layer === mapLayer), [mapLayer]);
   const recordById = (id: string) => museumRecords.find((item) => item.id === id);
 
   useEffect(() => {
@@ -47,10 +44,7 @@ function App() {
         <div className="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
           <a href="#top" className="font-display text-xl tracking-tight text-white">GRIBLJE<span className="text-[#FF2A2A]">.</span></a>
           <nav className="hidden md:flex items-center gap-7 font-mono text-xs uppercase text-neutral-400">
-            <a href="#zbirka" className="hover:text-white">Zbirka</a>
-            <a href="#zemljevid" className="hover:text-white">Zemljevid</a>
-            <a href="#cas" className="hover:text-white">Čas</a>
-            <a href="#o-muzeju" className="hover:text-white">O muzeju</a>
+            <a href="#zbirka" className="hover:text-white">Zbirka</a><a href="#zemljevid" className="hover:text-white">Zemljevid</a><a href="#cas" className="hover:text-white">Čas</a><a href="#o-muzeju" className="hover:text-white">O muzeju</a>
           </nav>
           <div className="font-mono text-[10px] uppercase text-neutral-500">Digitalni muzej vasi</div>
         </div>
@@ -59,8 +53,7 @@ function App() {
       <section id="top" className="relative h-screen min-h-[720px] flex items-center justify-center overflow-hidden">
         <motion.div style={{ y: heroY }} className="absolute inset-0 scale-110 opacity-50">
           <img src={museumRecords[1].image} alt="Kolpa pri Gribljah" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#050505_78%)]" />
-          <div className="absolute inset-0 bg-black/45" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#050505_78%)]" /><div className="absolute inset-0 bg-black/45" />
         </motion.div>
         <div className="relative z-10 text-center px-5 max-w-6xl">
           <SectionLabel>Digitalni muzej vasi / Bela krajina</SectionLabel>
@@ -87,7 +80,7 @@ function App() {
           {filteredItems.length === 0 && <div className="border border-dashed border-neutral-700 p-12 text-center text-neutral-500 font-mono text-sm">Ni zadetkov. Poskusi drugo iskanje.</div>}
         </section>
 
-        <section id="zemljevid" className="mb-28"><div className="grid lg:grid-cols-[.7fr_1.3fr] gap-10"><div><SectionLabel>02 / Zemljevid</SectionLabel><h2 className="font-display text-5xl md:text-7xl text-white uppercase leading-[.9]">Vas je<br /><span className="text-[#FF2A2A]">eksponat.</span></h2><p className="mt-6 text-neutral-400 leading-relaxed max-w-md">Zemljevid je naslednja velika plast muzeja. Sloji bodo povezovali kraje z ljudmi, hišami, predmeti, zgodbami in dogodki. Koordinate se dodajo šele, ko so preverjene.</p><div className="mt-7 grid grid-cols-2 gap-2">{mapLayers.map((layer) => { const count = villageMapPoints.filter((point) => point.layer === layer.id).length; return <button key={layer.id} onClick={() => setMapLayer(layer.id)} className={`border px-3 py-3 text-left transition ${mapLayer === layer.id ? 'border-[#FF2A2A] bg-[#FF2A2A] text-black' : 'border-neutral-800 bg-[#090909] text-neutral-400 hover:border-white'}`}><div className="font-mono text-[10px] uppercase">{layer.label}</div><div className="font-mono text-[9px] mt-1 opacity-70">{count ? `${count} točk` : 'v pripravi'}</div></button>; })}</div></div><div className="relative min-h-[430px] overflow-hidden border border-neutral-800 bg-[#090909]"><div className="absolute inset-0 opacity-30 bg-[linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] bg-[size:42px_42px]" /><svg viewBox="0 0 800 430" className="absolute inset-0 w-full h-full" aria-hidden="true"><path d="M80 20 C180 110 120 170 260 220 S520 230 720 410" fill="none" stroke="#FF2A2A" strokeWidth="5" strokeDasharray="10 9" opacity=".8" /><path d="M100 390 C220 320 330 360 430 280 S610 150 760 70" fill="none" stroke="#555" strokeWidth="2" /><path d="M40 150 L760 260" fill="none" stroke="#333" strokeWidth="1" /></svg>{visibleMapPoints.map((point, i) => { const points = [[29,55],[52,62],[67,35]]; const [x,y] = points[i % points.length]; const record = recordById(point.id); return <button key={point.id} onClick={() => record && setSelected(record)} className="absolute -translate-x-1/2 -translate-y-1/2 group" style={{ left: `${x}%`, top: `${y}%` }} aria-label={`Odpri ${point.title}`}><span className="block w-4 h-4 rounded-full bg-[#FF2A2A] border-2 border-white shadow-[0_0_0_7px_rgba(255,42,42,.12)] group-hover:scale-125 transition-transform" /><span className="absolute left-5 top-1/2 -translate-y-1/2 whitespace-nowrap bg-black/90 border border-neutral-700 px-2 py-1 text-[10px] font-mono text-white opacity-0 group-hover:opacity-100 transition-opacity">{point.title}</span></button>; })}{visibleMapPoints.length === 0 && <div className="absolute inset-0 flex items-center justify-center p-8 text-center"><div><div className="font-display text-3xl uppercase text-white">Sloj v pripravi</div><p className="mt-3 max-w-sm text-sm text-neutral-500">Za ta sloj še nimamo dovolj preverjenih muzejskih lokacij za prikaz.</p></div></div>}<div className="absolute top-4 left-4 border border-neutral-700 bg-black/80 px-3 py-2 font-mono text-[9px] uppercase text-neutral-400">Sloj: {mapLayers.find((layer) => layer.id === mapLayer)?.label}</div><div className="absolute bottom-4 left-4 right-4 flex justify-between font-mono text-[10px] uppercase text-neutral-500"><span>Kolpa</span><span>Digitalni muzejski zemljevid</span><span>Griblje</span></div></div></div></section>
+        <section id="zemljevid" className="mb-28"><div className="grid lg:grid-cols-[.7fr_1.3fr] gap-10"><div><SectionLabel>02 / Zemljevid</SectionLabel><h2 className="font-display text-5xl md:text-7xl text-white uppercase leading-[.9]">Vas je<br /><span className="text-[#FF2A2A]">eksponat.</span></h2><p className="mt-6 text-neutral-400 leading-relaxed max-w-md">Zemljevid zdaj uporablja preverjene koordinate. Sloji bodo povezovali kraje z ljudmi, hišami, predmeti, zgodbami in dogodki. Nepreverjenih lokacij ne prikazujemo kot dejanskih koordinat.</p><div className="mt-7 grid grid-cols-2 gap-2">{mapLayers.map((layer) => { const count = villageMapPoints.filter((point) => point.layer === layer.id).length; return <button key={layer.id} onClick={() => setMapLayer(layer.id)} className={`border px-3 py-3 text-left transition ${mapLayer === layer.id ? 'border-[#FF2A2A] bg-[#FF2A2A] text-black' : 'border-neutral-800 bg-[#090909] text-neutral-400 hover:border-white'}`}><div className="font-mono text-[10px] uppercase">{layer.label}</div><div className="font-mono text-[9px] mt-1 opacity-70">{count ? `${count} točk` : 'v pripravi'}</div></button>; })}</div></div><div className="overflow-hidden border border-neutral-800 bg-[#090909]"><VillageMap points={visibleMapPoints} layer={mapLayer} records={museumRecords} onSelect={setSelected} /></div></div></section>
 
         <section id="cas" className="mb-28"><div className="mb-10"><SectionLabel>03 / Čas</SectionLabel><h2 className="font-display text-5xl md:text-7xl text-white uppercase leading-none">Griblje skozi čas</h2></div><div className="border-t border-neutral-800">{timeline.map((item) => <div key={item.year} className="grid md:grid-cols-[230px_1fr] gap-6 border-b border-neutral-800 py-9"><div className="font-display text-xl text-[#FF2A2A]">{item.year}</div><div><h3 className="font-display text-3xl text-white uppercase mb-2">{item.title}</h3><p className="text-neutral-400 leading-relaxed max-w-3xl">{item.text}</p></div></div>)}</div></section>
 
