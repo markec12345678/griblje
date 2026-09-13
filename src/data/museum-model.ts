@@ -55,24 +55,21 @@ export type MuseumRelationship = {
   notes?: string[];
 };
 
-/**
- * Canonical relationship registry.
- *
- * Keep this empty until a relationship can be supported by a source or an
- * explicitly attributed local testimony. This prevents the graph from
- * turning plausible associations into undocumented historical facts.
- */
 export const museumRelationships: MuseumRelationship[] = [];
-
-/**
- * Canonical entity registry will be populated as curated entities are migrated
- * from the legacy collection models. Existing UI data remains untouched until
- * each entity has an appropriate evidence record.
- */
 export const museumEntities: MuseumEntity[] = [];
+
+export function getEntityById(entityId: string) {
+  return museumEntities.find((entity) => entity.id === entityId);
+}
 
 export function getRelationshipsForEntity(entityId: string) {
   return museumRelationships.filter(
     (relationship) => relationship.from === entityId || relationship.to === entityId,
+  );
+}
+
+export function getRelatedEntityIds(entityId: string) {
+  return getRelationshipsForEntity(entityId).map((relationship) =>
+    relationship.from === entityId ? relationship.to : relationship.from,
   );
 }
