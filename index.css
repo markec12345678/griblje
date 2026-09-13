@@ -115,6 +115,51 @@ body {
 }
 .markdown-body li { margin-bottom: 0.5rem; }
 
+/* Mobile museum navigation: keep the section index reachable without hiding content. */
+@media (max-width: 767px) {
+  header nav {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 58px;
+    padding: 0 8px;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    background: rgba(5, 5, 5, 0.96);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    scrollbar-width: none;
+    z-index: 50;
+  }
+
+  header nav::-webkit-scrollbar { display: none; }
+
+  header nav a {
+    flex: 0 0 auto;
+    min-width: 74px;
+    min-height: 44px;
+    padding: 0 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #a3a3a3;
+  }
+
+  header nav a:hover,
+  header nav a:focus-visible {
+    color: white;
+  }
+
+  body {
+    padding-bottom: 58px;
+  }
+}
+
 /* Museum-grade motion accessibility: preserve hierarchy without forcing animation. */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
