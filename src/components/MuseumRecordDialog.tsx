@@ -33,8 +33,15 @@ export function MuseumRecordDialog({ record, onClose }: Props) {
 
       if (event.key !== 'Tab' || !dialogRef.current) return;
       const focusable = Array.from(
-        dialogRef.current.querySelectorAll<HTMLElement>('button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])'),
-      ).filter((element) => !element.hasAttribute('disabled') && element.getAttribute('aria-hidden') !== 'true');
+        dialogRef.current.querySelectorAll<HTMLElement>(
+          'button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter(
+        (element): element is HTMLElement =>
+          element instanceof HTMLElement &&
+          !element.hasAttribute('disabled') &&
+          element.getAttribute('aria-hidden') !== 'true',
+      );
 
       if (focusable.length === 0) return;
       const first = focusable[0];
