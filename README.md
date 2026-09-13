@@ -1,20 +1,63 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Griblje — Digitalni muzej vasi
 
-# Run and deploy your AI Studio app
+Griblje je zasnovan kot **digitalni muzej resnične vasi** v Beli krajini.
 
-This contains everything you need to run your app locally.
+Projekt povezuje prostor, ljudi, zgodbe, fotografije, predmete, spomine, naravo in zgodovino v eno odprto muzejsko zbirko.
 
-View your app in AI Studio: https://ai.studio/apps/7f1a556d-6505-4d60-8607-de0002e7af6c
+## Koncept
 
-## Run Locally
+Glavna ideja je:
 
-**Prerequisites:**  Node.js
+**VAS → LJUDJE → HIŠE → ZGODBE → PREDMETI → DOGODKI → ZGODOVINA → KRAJINA**
 
+Namesto klasične turistične spletne strani je cilj ustvariti digitalni prostor, v katerem lahko obiskovalec raziskuje Griblje kot muzej.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Trenutno
+
+- digitalna muzejska zbirka
+- iskanje in filtriranje eksponatov
+- podrobni prikaz muzejskega zapisa
+- časovna os
+- prvi interaktivni koncept zemljevida vasi
+- pripravljena struktura za zgodbe, hiše, predmete in pričevanja domačinov
+- odziven vmesnik za telefon, tablico in računalnik
+
+## Vir gradiva
+
+Fotografski zapisi v trenutni zbirki uporabljajo javno dostopno gradivo Wikimedia Commons. Pri zgodovinskih vsebinah je cilj vsako pomembno trditev povezati s preverljivim virom.
+
+## Lokalni razvoj
+
+**Zahteva:** Node.js 18+
+
+```text
+npm install
+npm run dev
+```
+
+Produkcijski build:
+
+```text
+npm run build
+```
+
+Preverjanje TypeScript:
+
+```text
+npm run lint
+```
+
+## Naslednje faze
+
+1. natančen zemljevid Gribelj z dejanskimi lokacijami
+2. katalog hiš in domačij
+3. katalog ljudi in družin
+4. digitalni predmeti in dokumenti
+5. pričevanja domačinov
+6. arhivska dokumentacija in citiranje virov
+7. prispevki obiskovalcev z moderiranjem
+8. večjezična muzejska različica
+
+## Status
+
+Aktiven razvoj — **Digitalni muzej vasi Griblje**.
