@@ -17,13 +17,8 @@ body {
   overflow-x: hidden;
 }
 
-.font-display {
-  font-family: var(--font-display);
-}
-
-.font-mono {
-  font-family: var(--font-mono);
-}
+.font-display { font-family: var(--font-display); }
+.font-mono { font-family: var(--font-mono); }
 
 .glitch-hover:hover {
   animation: glitch 0.2s linear infinite;
@@ -77,12 +72,8 @@ body {
   100% { transform: translateX(-50%); }
 }
 
-.skew-container {
-  transform: skewY(-3deg);
-}
-.unskew-content {
-  transform: skewY(3deg);
-}
+.skew-container { transform: skewY(-3deg); }
+.unskew-content { transform: skewY(3deg); }
 
 .img-brutal {
   filter: grayscale(100%) contrast(150%);
@@ -94,7 +85,6 @@ body {
   mix-blend-mode: normal;
 }
 
-/* Markdown Styles */
 .markdown-body h2 {
   font-family: var(--font-display);
   font-size: 3rem;
@@ -106,9 +96,7 @@ body {
 }
 
 @media (min-width: 768px) {
-  .markdown-body h2 {
-    font-size: 4rem;
-  }
+  .markdown-body h2 { font-size: 4rem; }
 }
 
 .markdown-body p {
@@ -117,12 +105,7 @@ body {
   margin-bottom: 1.5rem;
   color: #a3a3a3;
 }
-
-.markdown-body strong {
-  color: white;
-  font-weight: 900;
-}
-
+.markdown-body strong { color: white; font-weight: 900; }
 .markdown-body ul {
   list-style-type: square;
   padding-left: 2rem;
@@ -130,7 +113,15 @@ body {
   color: #a3a3a3;
   font-size: 1.25rem;
 }
+.markdown-body li { margin-bottom: 0.5rem; }
 
-.markdown-body li {
-  margin-bottom: 0.5rem;
+/* Museum-grade motion accessibility: preserve hierarchy without forcing animation. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
