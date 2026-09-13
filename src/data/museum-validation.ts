@@ -1,6 +1,7 @@
-import { museumRecords } from './museum';
+import { museumRecords, timeline } from './museum';
 import { museumSources, sourceById } from './provenance';
 import { museumEntities, museumRelationships } from './museum-model';
+import { museumMedia, mediaById } from './media';
 
 export type MuseumValidationIssue = {
   severity: 'error' | 'warning';
@@ -22,12 +23,15 @@ export function validateMuseumData(): MuseumValidationIssue[] {
   for (const record of museumRecords) {
     for (const sourceId of record.sourceIds) {
       if (!sourceById.has(sourceId)) {
-        issues.push({
-          severity: 'error',
-          code: 'MISSING_SOURCE',
-          message: `Record ${record.id} references unknown source ${sourceId}.`,
-          entityId: record.id,
-        });
+        issues.push({ severity: 'error', code: 'MISSING_SOURCE', message: `Record ${record.id} references unknown source ${sourceId}.`, entityId: record.id });
+      }
+    }
+  }
+
+  for (const entry of timeline) {
+    for (const sourceId of entry.sourceIds) {
+      if (!sourceById.has(sourceId)) {
+        issues.push({ severity: 'error', code: 'MISSING_TIMELINE_SOURCE', message: `Timeline entry ${entry.title} references unknown source ${sourceId}.` });
       }
     }
   }
@@ -37,28 +41,16 @@ export function validateMuseumData(): MuseumValidationIssue[] {
     const toExists = entityIds.has(relationship.to) || recordIds.has(relationship.to);
 
     if (!fromExists || !toExists) {
-      issues.push({
-        severity: 'error',
-        code: 'MISSING_RELATION_ENDPOINT',
-        message: `Relationship ${relationship.id} references an unknown endpoint.`,
-      });
+      issues.push({ severity: 'error', code: 'MISSING_RELATION_ENDPOINT', message: `Relationship ${relationship.id} references an unknown endpoint.` });
     }
 
     if (relationship.sourceIds.length === 0) {
-      issues.push({
-        severity: 'warning',
-        code: 'UNSUPPORTED_RELATIONSHIP',
-        message: `Relationship ${relationship.id} has no supporting source.`,
-      });
+      issues.push({ severity: 'warning', code: 'UNSUPPORTED_RELATIONSHIP', message: `Relationship ${relationship.id} has no supporting source.` });
     }
 
     for (const sourceId of relationship.sourceIds) {
       if (!sourceById.has(sourceId)) {
-        issues.push({
-          severity: 'error',
-          code: 'MISSING_RELATION_SOURCE',
-          message: `Relationship ${relationship.id} references unknown source ${sourceId}.`,
-        });
+        issues.push({ severity: 'error', code: 'MISSING_RELATION_SOURCE', message: `Relationship ${relationship.id} references unknown source ${sourceId}.` });
       }
     }
   }
@@ -66,13 +58,20 @@ export function validateMuseumData(): MuseumValidationIssue[] {
   for (const entity of museumEntities) {
     for (const sourceId of entity.sourceIds) {
       if (!sourceById.has(sourceId)) {
-        issues.push({
-          severity: 'error',
-          code: 'MISSING_ENTITY_SOURCE',
-          message: `Entity ${entity.id} references unknown source ${sourceId}.`,
-          entityId: entity.id,
-        });
+        issues.push({ severity: 'error', code: 'MISSING_ENTITY_SOURCE', message: `Entity ${entity.id} references unknown source ${sourceId}.`, entityId: entity.id });
       }
+    }
+
+    for (const mediaId of entity.mediaIds) {
+      if (!mediaById.has(mediaId)) {
+        issues.push({ severity: 'error', code: 'MISSING_MEDIA', message: `Entity ${entity.id} references unknown media ${mediaId}.`, entityId: entity.id });
+      }
+    }
+  }
+
+  for (const media of museumMedia) {
+    if (!sourceById.has(media.sourceId)) {
+      issues.push({ severity: 'error', code: 'MISSING_MEDIA_SOURCE', message: `Media ${media.id} references unknown source ${media.sourceId}.`, entityId: media.id });
     }
   }
 
