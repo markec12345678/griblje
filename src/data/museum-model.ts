@@ -2,7 +2,7 @@ import type { MuseumStatus } from './museum';
 
 export type MuseumEntityType =
   | 'kraj'
-  | 'hiša'
+  | 'hisa'
   | 'oseba'
   | 'predmet'
   | 'zgodba'
