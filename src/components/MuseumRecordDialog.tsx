@@ -12,13 +12,17 @@ type Props = {
 export function MuseumRecordDialog({ record, onClose }: Props) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const openerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!record) return;
 
     const previousOverflow = document.body.style.overflow;
+    const activeElement = document.activeElement;
+    openerRef.current = activeElement instanceof HTMLElement ? activeElement : null;
     document.body.style.overflow = 'hidden';
-    closeRef.current?.focus();
+
+    requestAnimationFrame(() => closeRef.current?.focus());
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -30,7 +34,7 @@ export function MuseumRecordDialog({ record, onClose }: Props) {
       if (event.key !== 'Tab' || !dialogRef.current) return;
       const focusable = Array.from(
         dialogRef.current.querySelectorAll<HTMLElement>('button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])'),
-      ).filter((element) => !element.hasAttribute('disabled'));
+      ).filter((element) => !element.hasAttribute('disabled') && element.getAttribute('aria-hidden') !== 'true');
 
       if (focusable.length === 0) return;
       const first = focusable[0];
@@ -49,6 +53,9 @@ export function MuseumRecordDialog({ record, onClose }: Props) {
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', handleKeyDown);
+      const opener = openerRef.current;
+      if (opener && document.contains(opener)) requestAnimationFrame(() => opener.focus());
+      openerRef.current = null;
     };
   }, [record, onClose]);
 
