@@ -3,7 +3,7 @@ export type SourceType =
   | 'fotografija'
   | 'zemljevid'
   | 'spletni-vir'
-  | 'ustno-pričevanje'
+  | 'ustno-pričevanje'
   | 'spomin'
   | 'drugo';
 
@@ -39,10 +39,14 @@ export const museumSources: MuseumSource[] = [
     id: 'src-wikimedia-sv-vid',
     type: 'fotografija',
     title: 'Griblje, Črnomelj – cerkev sv. Vida',
+    creator: 'Eleassar',
     institution: 'Wikimedia Commons',
     url: 'https://commons.wikimedia.org/wiki/File:Griblje,_Črnomelj_-_cerkev_sv._Vida.jpg',
-    verificationStatus: 'delno-preverjeno',
-    notes: 'Avtor in licenca sta preverljiva na strani datoteke; attribution naj se prikaže v muzejski kartici vira.',
+    citation: 'Wikimedia Commons, Griblje, Črnomelj – cerkev sv. Vida',
+    license: 'CC BY-SA 3.0',
+    accessedAt: '2026-09-13',
+    verificationStatus: 'preverjeno',
+    notes: 'Avtor, datum nastanka in licenca so preverjeni na strani datoteke.',
   },
   {
     id: 'src-wikimedia-kolpa',
@@ -51,15 +55,20 @@ export const museumSources: MuseumSource[] = [
     institution: 'Wikimedia Commons',
     url: 'https://commons.wikimedia.org/wiki/File:Kolpa_griblje.jpg',
     verificationStatus: 'nepreverjeno',
+    notes: 'Metadata fotografije še ni bila prenesena v strukturirani zapis.',
   },
   {
     id: 'src-wikimedia-malenca',
     type: 'fotografija',
     title: 'Slap in malenca na Kolpi pri Gribljah',
+    creator: 'švabo',
     institution: 'Wikimedia Commons',
     url: 'https://commons.wikimedia.org/wiki/File:Slap_in_malenca_na_Kolpi_pri_Gribljah.jpg',
-    verificationStatus: 'delno-preverjeno',
-    notes: 'Licenčni podatki obstajajo na strani datoteke; pred javno muzejsko objavo jih je treba prenesti v strukturirani metadata zapis.',
+    citation: 'Wikimedia Commons, Slap in malenca na Kolpi pri Gribljah',
+    license: 'CC BY 3.0 / GFDL',
+    accessedAt: '2026-09-13',
+    verificationStatus: 'preverjeno',
+    notes: 'Avtor in licenčni podatki so preverjeni na strani datoteke.',
   },
   {
     id: 'src-wikimedia-1945-pilot',
@@ -68,24 +77,32 @@ export const museumSources: MuseumSource[] = [
     institution: 'Wikimedia Commons',
     url: 'https://commons.wikimedia.org/wiki/File:Pogovor_angleškega_pilota_s_partizani,_Griblje_pri_Črnomlju,_marec_1945.jpg',
     verificationStatus: 'delno-preverjeno',
-    notes: 'Fotografija je preverjena kot muzejski vizualni vir; zgodovinski kontekst zahteva ločen arhivski dokaz.',
+    notes: 'Fotografija je preverjena kot vizualni vir; zgodovinski kontekst zahteva ločen arhivski dokaz.',
   },
   {
     id: 'src-wikimedia-1945-ranjenci',
     type: 'fotografija',
     title: 'Ranjeni partizani opazujejo pristajanje zavezniških letal, Griblje pri Črnomlju, marec 1945',
+    creator: 'Franjo Veselko (1905–1977)',
     institution: 'Wikimedia Commons',
     url: 'https://commons.wikimedia.org/wiki/File:Ranjeni_partizani_opazujejo_pristajanje_zavezniških_letal,_Griblje_pri_Črnomlju,_marec_1945.jpg',
-    verificationStatus: 'delno-preverjeno',
-    notes: 'Fotografija je preverjena kot muzejski vizualni vir; širši zgodovinski kontekst zahteva ločen arhivski dokaz.',
+    citation: 'Wikimedia Commons, Ranjeni partizani opazujejo pristajanje zavezniških letal, Griblje pri Črnomlju, marec 1945',
+    license: 'Public domain',
+    accessedAt: '2026-09-13',
+    verificationStatus: 'preverjeno',
+    notes: 'Avtor, čas nastanka in javna domena so preverjeni na strani datoteke. Širši zgodovinski kontekst zahteva ločen arhivski vir.',
   },
   {
     id: 'src-wikimedia-meja',
     type: 'fotografija',
     title: 'Slovenian border fence in Griblje',
+    creator: 'Hythlodot',
     institution: 'Wikimedia Commons',
     url: 'https://commons.wikimedia.org/wiki/File:Slovenian_border_fence_in_Griblje.JPG',
-    verificationStatus: 'delno-preverjeno',
+    citation: 'Wikimedia Commons, Slovenian border fence in Griblje',
+    license: 'CC BY-SA 4.0',
+    accessedAt: '2026-09-13',
+    verificationStatus: 'preverjeno',
   },
   {
     id: 'src-wikimedia-panorama',
@@ -94,6 +111,7 @@ export const museumSources: MuseumSource[] = [
     institution: 'Wikimedia Commons',
     url: 'https://commons.wikimedia.org/wiki/File:Griblje,_Črnomelj.jpg',
     verificationStatus: 'nepreverjeno',
+    notes: 'Metadata fotografije še ni bila prenesena v strukturirani zapis.',
   },
   {
     id: 'src-wikimedia-ribnik',
@@ -102,6 +120,7 @@ export const museumSources: MuseumSource[] = [
     institution: 'Wikimedia Commons',
     url: 'https://commons.wikimedia.org/wiki/File:Pond_Griblje.jpg',
     verificationStatus: 'nepreverjeno',
+    notes: 'Metadata fotografije še ni bila prenesena v strukturirani zapis.',
   },
 ];
 
