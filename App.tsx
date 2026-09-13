@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
-import { AnimatePresence, motion, useScroll, useTransform } from 'motion/react';
-import { ArrowDown, BookOpen, CheckCircle2, ChevronRight, Clock3, Filter, Image as ImageIcon, MapPin, Search, X } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { motion, useScroll, useTransform } from 'motion/react';
+import { ArrowDown, BookOpen, ChevronRight, Filter, MapPin, Search } from 'lucide-react';
 import { collectionLayers, museumRecords, timeline, type MuseumRecord } from './src/data/museum';
 import { catalogEntries, catalogTotal } from './src/data/catalog';
 import { museumTrails } from './src/data/trails';
 import { mapLayers, villageMapPoints, type MapLayer } from './src/data/map';
 import { VillageMap } from './src/components/VillageMap';
+import { MuseumRecordDialog } from './src/components/MuseumRecordDialog';
 
 const categories = ['VSE', 'KRAJ', 'KOLPA', 'VOJNA', 'LJUDJE', 'HIŠE', 'PREDMETI', 'SPOMINI'];
 
@@ -32,13 +33,6 @@ function App() {
 
   const visibleMapPoints = useMemo(() => villageMapPoints.filter((point) => point.layer === mapLayer), [mapLayer]);
   const recordById = (id: string) => museumRecords.find((item) => item.id === id);
-
-  useEffect(() => {
-    document.body.style.overflow = selected ? 'hidden' : '';
-    const close = (event: KeyboardEvent) => event.key === 'Escape' && setSelected(null);
-    window.addEventListener('keydown', close);
-    return () => { document.body.style.overflow = ''; window.removeEventListener('keydown', close); };
-  }, [selected]);
 
   return (
     <div className="min-h-screen bg-[#050505] text-[#E4E3E0] selection:bg-[#FF2A2A] selection:text-white">
@@ -74,7 +68,7 @@ function App() {
         <section id="cas" className="mb-28"><div className="mb-10"><SectionLabel>03 / Čas</SectionLabel><h2 className="font-display text-5xl md:text-7xl text-white uppercase leading-none">Griblje skozi čas</h2></div><div className="border-t border-neutral-800">{timeline.map((item) => <div key={item.year} className="grid md:grid-cols-[230px_1fr] gap-6 border-b border-neutral-800 py-9"><div className="font-display text-xl text-[#FF2A2A]">{item.year}</div><div><h3 className="font-display text-3xl text-white uppercase mb-2">{item.title}</h3><p className="text-neutral-400 leading-relaxed max-w-3xl">{item.text}</p></div></div>)}</div></section>
       </main>
 
-      <AnimatePresence>{selected && <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm p-4 md:p-8 flex items-center justify-center" onMouseDown={(e) => e.target === e.currentTarget && setSelected(null)}><motion.div initial={{ opacity: 0, y: 20, scale: .98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 20, scale: .98 }} className="w-full max-w-5xl max-h-[92vh] overflow-auto bg-[#080808] border border-neutral-700"><div className="flex justify-end p-3 border-b border-neutral-800"><button onClick={() => setSelected(null)} aria-label="Zapri" className="p-2 text-neutral-400 hover:text-white"><X size={22} /></button></div><div className="grid md:grid-cols-[1fr_1fr]"><div className="bg-black min-h-[280px]"><img src={selected.image} alt={selected.title} className="w-full h-full object-cover max-h-[520px]" referrerPolicy="no-referrer" /></div><div className="p-7 md:p-9"><div className="font-mono text-[10px] uppercase text-[#FF2A2A]">{selected.category} · {selected.period}</div><h2 className="font-display text-4xl md:text-6xl text-white uppercase leading-none mt-3">{selected.title}</h2><p className="mt-6 text-neutral-300 leading-relaxed">{selected.description}</p><div className="mt-7 space-y-3 border-t border-neutral-800 pt-6 font-mono text-[10px] uppercase text-neutral-500"><div><MapPin size={13} className="inline mr-2" />{selected.location}</div><div><ImageIcon size={13} className="inline mr-2" />Vir: {selected.source}</div><div><CheckCircle2 size={13} className="inline mr-2" />Status: {selected.status}</div></div>{selected.relatedIds && selected.relatedIds.length > 0 && <div className="mt-8 border-t border-neutral-800 pt-6"><div className="font-mono text-[10px] uppercase text-neutral-600 mb-3">Povezani zapisi</div><div className="flex flex-wrap gap-2">{selected.relatedIds.map((id) => { const related = recordById(id); return related ? <button key={id} onClick={() => setSelected(related)} className="border border-neutral-700 px-3 py-2 text-left hover:border-[#FF2A2A] text-white font-mono text-[10px] uppercase">{related.title}</button> : null; })}</div></div>}</div></div></motion.div></div>}</AnimatePresence>
+      <MuseumRecordDialog record={selected} onClose={() => setSelected(null)} />
     </div>
   );
 }
