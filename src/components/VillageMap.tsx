@@ -35,18 +35,24 @@ export function VillageMap({ points, layer, records, onSelect }: Props) {
     const group = markersRef.current;
     if (!L || !map || !group) return;
     group.clearLayers();
-    const verified = points.filter((p) => p.verified && p.lat != null && p.lng != null);
+
+    // Keep the component safe even if a future caller passes all map points.
+    const layerPoints = points.filter((point) => point.layer === layer);
+    const verified = layerPoints.filter((point) => point.verified && point.lat != null && point.lng != null);
+
     verified.forEach((point) => {
       const record = point.relatedIds.map((id) => records.find((item) => item.id === id)).find(Boolean) ?? records.find((item) => item.id === point.id);
       const marker = L.circleMarker([point.lat!, point.lng!], { radius: 8, color: '#fff', weight: 2, fillColor: '#ff2a2a', fillOpacity: 1 }).addTo(group);
       marker.bindTooltip(point.title, { direction: 'top', offset: [0, -8] });
       marker.on('click', () => record && onSelect(record));
     });
-    if (verified.length > 1) map.fitBounds(L.latLngBounds(verified.map((p) => [p.lat!, p.lng!])), { maxZoom: 15, animate: false });
+
+    if (verified.length > 1) map.fitBounds(L.latLngBounds(verified.map((point) => [point.lat!, point.lng!])), { maxZoom: 15, animate: false });
     else if (verified.length === 1) map.setView([verified[0].lat!, verified[0].lng!], 14);
   }, [points, layer, records, onSelect]);
 
-  const unverified = points.filter((p) => !p.verified || p.lat == null || p.lng == null);
+  const layerPoints = points.filter((point) => point.layer === layer);
+  const unverified = layerPoints.filter((point) => !point.verified || point.lat == null || point.lng == null);
   return <div className="relative h-[430px] w-full bg-[#111]">
     <div ref={containerRef} className="absolute inset-0" />
     <div className="absolute top-3 left-3 z-[500] border border-neutral-700 bg-black/90 px-3 py-2 font-mono text-[9px] uppercase text-neutral-300">Sloj: {layer}</div>
