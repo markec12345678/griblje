@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion, useScroll, useTransform } from 'motion/react';
 import { ArrowDown, BookOpen, CheckCircle2, ChevronRight, Clock3, Filter, Image as ImageIcon, MapPin, Search, X } from 'lucide-react';
 import { collectionLayers, museumRecords, timeline, type MuseumRecord } from './src/data/museum';
+import { catalogEntries, catalogTotal } from './src/data/catalog';
 import { mapLayers, villageMapPoints, type MapLayer } from './src/data/map';
 import { VillageMap } from './src/components/VillageMap';
 
@@ -44,7 +45,7 @@ function App() {
         <div className="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
           <a href="#top" className="font-display text-xl tracking-tight text-white">GRIBLJE<span className="text-[#FF2A2A]">.</span></a>
           <nav className="hidden md:flex items-center gap-7 font-mono text-xs uppercase text-neutral-400">
-            <a href="#zbirka" className="hover:text-white">Zbirka</a><a href="#zemljevid" className="hover:text-white">Zemljevid</a><a href="#cas" className="hover:text-white">Čas</a><a href="#o-muzeju" className="hover:text-white">O muzeju</a>
+            <a href="#zbirka" className="hover:text-white">Zbirka</a><a href="#katalog" className="hover:text-white">Katalog</a><a href="#zemljevid" className="hover:text-white">Zemljevid</a><a href="#cas" className="hover:text-white">Čas</a><a href="#o-muzeju" className="hover:text-white">O muzeju</a>
           </nav>
           <div className="font-mono text-[10px] uppercase text-neutral-500">Digitalni muzej vasi</div>
         </div>
@@ -78,6 +79,23 @@ function App() {
           <div className="bg-[#0a0a0a] border border-neutral-800 p-4 md:p-5 mb-8 sticky top-16 z-20"><div className="relative mb-4"><Search className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-600" size={19} /><input aria-label="Iskanje po muzejski zbirki" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Išči: Kolpa, cerkev, 1945 ..." className="w-full bg-black border border-neutral-700 px-12 py-4 text-white outline-none focus:border-[#FF2A2A] font-mono text-sm" /></div><div className="flex flex-wrap gap-2 items-center"><Filter size={15} className="text-neutral-600 mr-1" />{categories.map((item) => <button key={item} onClick={() => setCategory(item)} className={`px-3 py-2 border font-mono text-[10px] uppercase transition ${category === item ? 'bg-[#FF2A2A] text-black border-[#FF2A2A]' : 'border-neutral-700 text-neutral-400 hover:border-white hover:text-white'}`}>{item}</button>)}</div></div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">{filteredItems.map((item, index) => <motion.article layout key={item.id} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * .035 }} tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && setSelected(item)} onClick={() => setSelected(item)} className="group border border-neutral-800 bg-[#090909] hover:border-[#FF2A2A] focus:border-[#FF2A2A] outline-none cursor-pointer transition-colors"><div className="aspect-[4/3] overflow-hidden relative bg-neutral-900"><img src={item.image} alt={item.title} loading={index > 2 ? 'lazy' : 'eager'} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" referrerPolicy="no-referrer" /><div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/80 to-transparent" /><span className="absolute top-3 left-3 bg-black/90 text-[#FF2A2A] px-2 py-1 font-mono text-[10px]">{item.category}</span></div><div className="p-5"><div className="font-mono text-[10px] text-neutral-600 mb-2">{item.period}</div><h3 className="font-display text-3xl text-white uppercase leading-none mb-3">{item.title}</h3><p className="text-neutral-400 text-sm leading-relaxed line-clamp-3">{item.description}</p><div className="mt-5 pt-4 border-t border-neutral-800 flex items-center justify-between text-[#FF2A2A] font-mono text-[10px] uppercase"><span><MapPin size={13} className="inline mr-1" />{item.location}</span><ChevronRight size={17} /></div></div></motion.article>)}</div>
           {filteredItems.length === 0 && <div className="border border-dashed border-neutral-700 p-12 text-center text-neutral-500 font-mono text-sm">Ni zadetkov. Poskusi drugo iskanje.</div>}
+        </section>
+
+        <section id="katalog" className="mb-28">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-7 mb-10">
+            <div><SectionLabel>01A / Katalog</SectionLabel><h2 className="font-display text-5xl md:text-7xl text-white uppercase leading-none">Stanje zbirke</h2></div>
+            <div className="font-mono text-xs text-neutral-500">{catalogTotal} ZAPISOV / {catalogEntries.length} SKLOPOV</div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
+            {catalogEntries.map((entry) => (
+              <div key={entry.kind} className={`border p-5 text-left transition ${entry.status === 'aktivno' ? 'border-neutral-700 bg-[#090909] hover:border-[#FF2A2A]' : 'border-neutral-800 bg-[#070707]'}`}>
+                <div className="font-mono text-[10px] uppercase text-neutral-500">{entry.status}</div>
+                <div className="font-display text-4xl text-white mt-3">{entry.count}</div>
+                <div className="font-display text-lg uppercase text-white">{entry.label}</div>
+                <p className="mt-2 text-[11px] leading-relaxed text-neutral-500">{entry.description}</p>
+              </div>
+            ))}
+          </div>
         </section>
 
         <section id="zemljevid" className="mb-28"><div className="grid lg:grid-cols-[.7fr_1.3fr] gap-10"><div><SectionLabel>02 / Zemljevid</SectionLabel><h2 className="font-display text-5xl md:text-7xl text-white uppercase leading-[.9]">Vas je<br /><span className="text-[#FF2A2A]">eksponat.</span></h2><p className="mt-6 text-neutral-400 leading-relaxed max-w-md">Zemljevid zdaj uporablja preverjene koordinate. Sloji bodo povezovali kraje z ljudmi, hišami, predmeti, zgodbami in dogodki. Nepreverjenih lokacij ne prikazujemo kot dejanskih koordinat.</p><div className="mt-7 grid grid-cols-2 gap-2">{mapLayers.map((layer) => { const count = villageMapPoints.filter((point) => point.layer === layer.id).length; return <button key={layer.id} onClick={() => setMapLayer(layer.id)} className={`border px-3 py-3 text-left transition ${mapLayer === layer.id ? 'border-[#FF2A2A] bg-[#FF2A2A] text-black' : 'border-neutral-800 bg-[#090909] text-neutral-400 hover:border-white'}`}><div className="font-mono text-[10px] uppercase">{layer.label}</div><div className="font-mono text-[9px] mt-1 opacity-70">{count ? `${count} točk` : 'v pripravi'}</div></button>; })}</div></div><div className="overflow-hidden border border-neutral-800 bg-[#090909]"><VillageMap points={visibleMapPoints} layer={mapLayer} records={museumRecords} onSelect={setSelected} /></div></div></section>
