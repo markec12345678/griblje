@@ -37,7 +37,7 @@ export function VillageMap({ points, layer, records, onSelect }: Props) {
     group.clearLayers();
     const verified = points.filter((p) => p.verified && p.lat != null && p.lng != null);
     verified.forEach((point) => {
-      const record = records.find((item) => item.id === point.id);
+      const record = point.relatedIds.map((id) => records.find((item) => item.id === id)).find(Boolean) ?? records.find((item) => item.id === point.id);
       const marker = L.circleMarker([point.lat!, point.lng!], { radius: 8, color: '#fff', weight: 2, fillColor: '#ff2a2a', fillOpacity: 1 }).addTo(group);
       marker.bindTooltip(point.title, { direction: 'top', offset: [0, -8] });
       marker.on('click', () => record && onSelect(record));
